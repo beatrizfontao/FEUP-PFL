@@ -8,15 +8,15 @@
 :- consult('display.pl').
 
 a :-
-    create_board(5, FinalBoard),
-    display_b(FinalBoard).
+    initial_state(5, FinalBoard),
+    display_game(FinalBoard).
 
-create_board(Size, FinalBoard) :- 
+initial_state(Size, GameState) :- 
     S is Size - 2,
     create_line(Size, duckt, [], Line),
     init(Size, S,[Line], Board),
     create_line(Size, ducko, [], Line2),
-    add_final(Line2, Board, FinalBoard).
+    add_final(Line2, Board, GameState).
 
 init(_, 0, FinalBoard, FinalBoard).
 init(Size, Col, CurrentBoard, FinalBoard) :-
