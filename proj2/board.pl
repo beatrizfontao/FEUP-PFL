@@ -18,6 +18,7 @@ create_board(Size, FinalBoard) :-
     create_line(Size, ducko, [], Line2),
     add_final(Line2, Board, FinalBoard).
 
+
 init(_, 0, FinalBoard, FinalBoard).
 init(Size, Col, CurrentBoard, FinalBoard) :-
     Col > 0,
