@@ -1,15 +1,4 @@
-:- use_module(library(lists)).
-:- use_module(library(clpfd)).
-:- use_module(library(aggregate)).
-:- use_module(library(random)).
-:- use_module(library(system)).
-:- use_module(library(between)).
-
 :- consult('display.pl').
-
-a :-
-    initial_state(5, FinalBoard),
-    display_game(FinalBoard).
 
 initial_state(Size, GameState) :- 
     S is Size - 2,
@@ -34,3 +23,21 @@ create_line(Size, Player, CurrentLine, FinalLine) :-
 add_final([], FinalBoard, FinalBoard).
 add_final(Line, CurrentBoard, FinalBoard) :-
     add_final([], [Line|CurrentBoard], FinalBoard).
+
+% Define a predicate to change an element in the matrix
+change(GameState, Col, Row, Piece, NewGameState) :-
+    nth0(Row, GameState, RowList),
+    replace(Col, Piece, RowList, NewRowList),
+    replace(Row, NewRowList, GameState, NewGameState). 
+
+% Define a predicate to replace an element in a list
+replace(0, L, [_|T], [L|T]).
+replace(I, L, [H|T], [H|R]) :-
+    I > 0,
+    I1 is I-1,
+    replace(I1, L, T, R).
+
+get_piece(GameState, Col, Row, Piece) :-
+    nth0(Row, GameState, RowList),
+    nth0(Col, RowList, Piece).
+    

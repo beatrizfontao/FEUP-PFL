@@ -1,36 +1,4 @@
-symb(ducko, '\x278a\').
-symb(duckt, '\x278b\').
-symb(swano, '\x2780\').
-symb(swant, '\x2781\').
-symb(e, ' ').
-
-row(1, 'A').
-row(2, 'B').
-row(3, 'C').
-row(4, 'D').
-row(5, 'E').
-row(6, 'F').
-row(7, 'G').
-row(8, 'H').
-row(9, 'I').
-row(10, 'J').
-row(11, 'K').
-row(12, 'L').
-row(13, 'M').
-row(14, 'N').
-row(15, 'O').
-row(16, 'P').
-row(17, 'Q').
-row(18, 'R').
-row(19, 'S').
-row(20, 'T').
-row(21, 'U').
-row(22, 'V').
-row(23, 'W').
-row(24, 'X').
-row(25, 'Y').
-row(26, 'Z').
-
+:- consult('utils.pl').
 
 display_game(GameState) :-
     length(GameState, N),
