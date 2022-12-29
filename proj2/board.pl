@@ -18,7 +18,6 @@ initial_state(Size, GameState) :-
     create_line(Size, ducko, [], Line2),
     add_final(Line2, Board, GameState).
 
-
 init(_, 0, FinalBoard, FinalBoard).
 init(Size, Col, CurrentBoard, FinalBoard) :-
     Col > 0,
