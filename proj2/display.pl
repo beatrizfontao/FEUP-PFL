@@ -1,43 +1,12 @@
-symb(ducko, '\x278a\').
-symb(duckt, '\x278b\').
-symb(swano, '\x2780\').
-symb(swant, '\x2781\').
-symb(e, ' ').
-
-row(1, 'A').
-row(2, 'B').
-row(3, 'C').
-row(4, 'D').
-row(5, 'E').
-row(6, 'F').
-row(7, 'G').
-row(8, 'H').
-row(9, 'I').
-row(10, 'J').
-row(11, 'K').
-row(12, 'L').
-row(13, 'M').
-row(14, 'N').
-row(15, 'O').
-row(16, 'P').
-row(17, 'Q').
-row(18, 'R').
-row(19, 'S').
-row(20, 'T').
-row(21, 'U').
-row(22, 'V').
-row(23, 'W').
-row(24, 'X').
-row(25, 'Y').
-row(26, 'Z').
-
+:- consult('utils.pl').
 
 display_game(GameState) :-
     length(GameState, N),
     N < 27,
+    write('  '),
     letters(1, N),
     top(N),
-    matrix(GameState),
+    matrix(GameState, 1),
     bot(N).
 
 letters(Size, Size) :-
@@ -52,6 +21,7 @@ letters(N, Size) :-
     letters(N1, Size).
 
 top(Size) :-
+    write('  '),
     write('\x2554\'),
     top_middle(Size).
 
@@ -69,6 +39,7 @@ top_cross(_) :-
     write('\x2566\').
 
 bot(Size) :-
+    write('  '),
     write('\x255a\'),
     bot_middle(Size).
 
@@ -102,13 +73,18 @@ mid_cross(1) :-
 mid_cross(_) :-
     write('\x256c\').
 
-matrix([L]) :-
+matrix([L], CurrentLine) :-
+    CurrentLine > 0,
+    write(CurrentLine), write(' '),
     line(L).
-matrix([L|R]) :-
+matrix([L|R], CurrentLine) :-
+    CurrentLine > 0,
+    write(CurrentLine), write(' '),
     line(L),
+    NextLine is CurrentLine + 1,
     length(L, N),
-    mid(N),
-    matrix(R).
+    write('  '), mid(N),
+    matrix(R, NextLine).
 
 line([]) :- write('\x2551\'), nl.
 line([C|R]) :-
