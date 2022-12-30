@@ -127,17 +127,34 @@ get_valid_moves(swano, Col, Row, Length, Moves):-
     append(InitialPosition, [NewCol1, NewRow], ThirdOption),
     append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
 
-/*get_winner(Player1, Player2, Winner)*/
-get_winner(true, false, Player1).
-get_winner(false, true, Player2).
-get_winner(false, false, None).
+check_capture(GameState, Move, Piece):-
+    nth0(0, Move, Col),
+    nth0(1, Move, Row),
+    nth0(2, Move, NewCol),
+    nth0(3, Move, NewRow),
+    %em_frente
+    (NewCol == Col ->
+        (get_piece(GameState, NewCol, NewRow, PositionPiece), PositionPiece \= e ->
+            false; true.);
+    %diagonal_mesma_equipa
+        (get_piece(GameState, NewCol, NewRow, PositionPiece), team(Piece, PositionPiece) ->
+            false; true.)
+    ).
+
+/*get_winner(+Player1, +Player2, -Winner)*/
+get_winner(true, false, 1).
+get_winner(false, true, 2).
+get_winner(false, false, 0).
+
 /*
 game_over(GameState, Winner):-
     length(GameState, Length),
     nth0(0, GameState, TopRow),
-    nth0(2, GameState, BottomRow),
+    Ind is Length - 1,
+    nth0(Ind, GameState, BottomRow),
     get_winner(member(swant, TopRow), member(swano, BottomRow), Winner).
 */
+
 is_still_playing(GameState, 1):-
     is_piece_present(GameState, duckt); is_piece_present(GameState, swant).
 is_still_playing(GameState, 2):-

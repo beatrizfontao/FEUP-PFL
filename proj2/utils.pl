@@ -4,6 +4,10 @@ symb(swano, '\x2780\').
 symb(swant, '\x2781\').
 symb(e, ' ').
 
+team(ducko, swano).
+team(duckt, swant).
+team(e, e).
+
 row(1, 'A').
 row(1, '1').
 row(2, 'B').
