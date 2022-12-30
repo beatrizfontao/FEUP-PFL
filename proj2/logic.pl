@@ -54,91 +54,90 @@ swano: pode descer na vertical ou na diagonal:
 
 /*DUCK*/
 
-get_valid_moves(duckt, _, Length - 1, Length, []).
-get_valid_moves(duckt, Col, Row, Length, Moves):-
-    append([Col, Row], [], InitialPosition),
-    %vertical_para_baixo
-    NewRow is Row + 1, 
-    NewRow < Length,
-    append(InitialPosition, [Col, NewRow], FirstOption),
-    %diagonal_para_baixo_esquerda
-    NewCol is Col - 1, 
-    NewCol >= 0,
-    append(InitialPosition, [NewCol, NewRow], SecondOption),
-    %diagonal_para_baixo_direita
-    NewCol1 is Col + 1, 
-    NewCol1 < Length,
-    append(InitialPosition, [NewCol1, NewRow], ThirdOption),
-    append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
+get_valid_moves(ducko, Col, Row, Length, Moves):-
+append([Col, Row], [], InitialPosition),
+%vertical_para_baixo
+NewRow is Row + 1, 
+(NewRow < Length) -> 
+    append(InitialPosition, [Col, NewRow], FirstOption), append([FirstOption], [], AuxMoves),
+    NewCol is Col - 1,
+    (NewCol >= 0 -> 
+        append(InitialPosition, [NewCol, NewRow], SecondOption), append([SecondOption], AuxMoves, AuxMoves2);
+        append([], AuxMoves, AuxMoves2)
+    ),
+    NewCol1 is Col + 1,
+    (NewCol1 < Length ->
+        append(InitialPosition, [NewCol1, NewRow], ThirdOption), append([ThirdOption], AuxMoves2, Moves);
+        append([], AuxMoves2, Moves)
+    ); append([], [], Moves).
 
 /*SWAN*/
-get_valid_moves(swant, _, 0, _, []).
-get_valid_moves(swant, Col, Row, Length, Moves):-
+get_valid_moves(swano, Col, Row, Length, Moves):-
     append([Col, Row], [], InitialPosition),
     %vertical_para_cima
     NewRow is Row - 1, 
-    NewRow < Length,
-    append(InitialPosition, [Col, NewRow], FirstOption),
-    %diagonal_para_cima_esquerda
-    NewCol is Col - 1, 
-    NewCol >= 0,
-    append(InitialPosition, [NewCol, NewRow], SecondOption),
-    %diagonal_para_cima_direita
-    NewCol1 is Col + 1, 
-    NewCol1 < Length,
-    append(InitialPosition, [NewCol1, NewRow], ThirdOption),
-    append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
+    (NewRow >= 0) -> 
+        append(InitialPosition, [Col, NewRow], FirstOption), append([FirstOption], [], AuxMoves),
+        NewCol is Col - 1,
+        (NewCol >= 0 -> 
+            append(InitialPosition, [NewCol, NewRow], SecondOption), append([SecondOption], AuxMoves, AuxMoves2);
+            append([], AuxMoves, AuxMoves2)
+        ),
+        NewCol1 is Col + 1,
+        (NewCol1 < Length ->
+            append(InitialPosition, [NewCol1, NewRow], ThirdOption), append([ThirdOption], AuxMoves2, Moves);
+            append([], AuxMoves2, Moves)
+        ); append([], [], Moves).
 
 /*--------------------------PLAYER 2--------------------------*/
 
 /*DUCK*/
-get_valid_moves(ducko, _, 0, _, []).
-get_valid_moves(ducko, Col, Row, Length, Moves):-
+get_valid_moves(duckt, Col, Row, Length, Moves):-
     append([Col, Row], [], InitialPosition),
-    %vertical_para_baixo
+    %vertical_para_cima
     NewRow is Row - 1, 
-    NewRow < Length,
-    append(InitialPosition, [Col, NewRow], FirstOption),
-    %diagonal_para_cima_esquerda
-    NewCol is Col - 1, 
-    NewCol >= 0,
-    append(InitialPosition, [NewCol, NewRow], SecondOption),
-    %diagonal_para_cima_direita
-    NewCol1 is Col + 1, 
-    NewCol1 < Length,
-    append(InitialPosition, [NewCol1, NewRow], ThirdOption),
-    append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
+    (NewRow >= 0) -> 
+        append(InitialPosition, [Col, NewRow], FirstOption), append([FirstOption], [], AuxMoves),
+        NewCol is Col - 1,
+        (NewCol >= 0 -> 
+            append(InitialPosition, [NewCol, NewRow], SecondOption), append([SecondOption], AuxMoves, AuxMoves2);
+            append([], AuxMoves, AuxMoves2)
+        ),
+        NewCol1 is Col + 1,
+        (NewCol1 < Length ->
+            append(InitialPosition, [NewCol1, NewRow], ThirdOption), append([ThirdOption], AuxMoves2, Moves);
+            append([], AuxMoves2, Moves)
+        ); append([], [], Moves).
 
 /*SWAN*/
-get_valid_moves(swano, _, Length - 1, Length, []).
-get_valid_moves(swano, Col, Row, Length, Moves):-
-    append([Col, Row], [], InitialPosition),
-    %vertical_para_baixo
-    NewRow is Row + 1, 
-    NewRow < Length,
-    append(InitialPosition, [Col, NewRow], FirstOption),
-    %diagonal_para_baixo_esquerda
-    NewCol is Col - 1, 
-    NewCol >= 0,
-    append(InitialPosition, [NewCol, NewRow], SecondOption),
-    %diagonal_para_baixo_direita
-    NewCol1 is Col + 1, 
-    NewCol1 < Length,
-    append(InitialPosition, [NewCol1, NewRow], ThirdOption),
-    append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
+get_valid_moves(swant, Col, Row, Length, Moves):-
+append([Col, Row], [], InitialPosition),
+%vertical_para_baixo
+NewRow is Row + 1, 
+(NewRow < Length) -> 
+    append(InitialPosition, [Col, NewRow], FirstOption), append([FirstOption], [], AuxMoves),
+    NewCol is Col - 1,
+    (NewCol >= 0 -> 
+        append(InitialPosition, [NewCol, NewRow], SecondOption), append([SecondOption], AuxMoves, AuxMoves2);
+        append([], AuxMoves, AuxMoves2)
+    ),
+    NewCol1 is Col + 1,
+    (NewCol1 < Length ->
+        append(InitialPosition, [NewCol1, NewRow], ThirdOption), append([ThirdOption], AuxMoves2, Moves);
+        append([], AuxMoves2, Moves)
+    ); append([], [], Moves).
 
-check_capture(GameState, Move, Piece):-
+valid_capture(GameState, Move, Piece):-
     nth0(0, Move, Col),
-    nth0(1, Move, Row),
     nth0(2, Move, NewCol),
     nth0(3, Move, NewRow),
     %em_frente
     (NewCol == Col ->
         (get_piece(GameState, NewCol, NewRow, PositionPiece), PositionPiece \= e ->
-            false; true.);
+            false; true);
     %diagonal_mesma_equipa
         (get_piece(GameState, NewCol, NewRow, PositionPiece), team(Piece, PositionPiece) ->
-            false; true.)
+            false; true)
     ).
 
 /*get_winner(+Player1, +Player2, -Winner)*/
