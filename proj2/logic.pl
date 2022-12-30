@@ -13,8 +13,11 @@ move(GameState, Move, NewGameState) :-
     change(NewGameStateTemp, NewCol, NewRow, Piece, NewGameState).
 
 check_turn(1, duckt, true).
+check_turn(1, swant, true).
 check_turn(2, ducko, true).
+check_turn(2, swano, true).
 check_turn(_, _, false).
+
 /*
 valid_moves(GameState, Piece, ListOfMoves):-
     length(GameState, Length),
@@ -51,7 +54,7 @@ swano: pode descer na vertical ou na diagonal:
 
 /*DUCK*/
 
-get_valid_moves(duckt, Length - 1, Length - 1, Length, []).
+get_valid_moves(duckt, _, Length - 1, Length, []).
 get_valid_moves(duckt, Col, Row, Length, Moves):-
     append([Col, Row], [], InitialPosition),
     %vertical_para_baixo
@@ -68,100 +71,79 @@ get_valid_moves(duckt, Col, Row, Length, Moves):-
     append(InitialPosition, [NewCol1, NewRow], ThirdOption),
     append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
 
-/*
-%vertical_para_baixo
-get_valid_move(duckt, Col, Row, Length, Move):-
-    append([Col, Row], [], InitialPosition),
-    NewRow is Row + 1,
-    NewRow < Length,
-    append(InitialPosition, [Col, NewRow], Move).
-
-%diagonal_para_baixo_esquerda
-get_valid_move(duckt, Col, Row, Length, Move):-
-    append([Col, Row], [], InitialPosition),
-    NewRow is Row + 1, NewRow < Length,
-    NewCol is Col - 1, NewCol >= 0,
-    append(InitialPosition, [NewCol, NewRow], Move).
-
-%diagonal_para_baixo_direita
-get_valid_move(duckt, Col, Row, Length, Move):-
-    append([Col, Row], [], InitialPosition),
-    NewRow is Row + 1, NewRow < Length,
-    NewCol is Col + 1, NewCol < Length,
-    append(InitialPosition, [NewCol, NewRow], Move).
-*/
 /*SWAN*/
+get_valid_moves(swant, _, 0, _, []).
+get_valid_moves(swant, Col, Row, Length, Moves):-
+    append([Col, Row], [], InitialPosition),
+    %vertical_para_cima
+    NewRow is Row - 1, 
+    NewRow < Length,
+    append(InitialPosition, [Col, NewRow], FirstOption),
+    %diagonal_para_cima_esquerda
+    NewCol is Col - 1, 
+    NewCol >= 0,
+    append(InitialPosition, [NewCol, NewRow], SecondOption),
+    %diagonal_para_cima_direita
+    NewCol1 is Col + 1, 
+    NewCol1 < Length,
+    append(InitialPosition, [NewCol1, NewRow], ThirdOption),
+    append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
 
-%vertical_para_cima
-get_valid_move(swant, Col, Row, _, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row - 1, NewRow >= 0,
-    append([Col, NewRow], Move, Move).
-
-%diagonal_para_cima_esquerda
-get_valid_move(swant, Col, Row, _, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row - 1, NewRow >= 0,
-    NewCol is Col - 1, NewCol >= 0,
-    append([NewCol, NewRow], Move, Move).
-
-%diagonal_para_cima_direita
-get_valid_move(swant, Col, Row, Length, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row - 1, NewRow >= 0,
-    NewCol is Col + 1, NewCol < Length,
-    append([Col, NewRow], Move, Move).
-    
 /*--------------------------PLAYER 2--------------------------*/
 
 /*DUCK*/
-
-%vertical_para_cima
-get_valid_move(ducko, Col, Row, _, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row - 1, NewRow >= 0,
-    append([Col, NewRow], Move, Move).
-
-%diagonal_para_cima_esquerda
-get_valid_move(ducko, Col, Row, _, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row - 1, NewRow >= 0,
-    NewCol is Col - 1, NewCol >= 0,
-    append([NewCol, NewRow], Move, Move).
-
-%diagonal_para_cima_direita
-get_valid_move(ducko, Col, Row, Length, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row - 1, NewRow >= 0,
-    NewCol is Col + 1, NewCol < Length,
-    append([Col, NewRow], Move, Move).
+get_valid_moves(ducko, _, 0, _, []).
+get_valid_moves(ducko, Col, Row, Length, Moves):-
+    append([Col, Row], [], InitialPosition),
+    %vertical_para_baixo
+    NewRow is Row - 1, 
+    NewRow < Length,
+    append(InitialPosition, [Col, NewRow], FirstOption),
+    %diagonal_para_cima_esquerda
+    NewCol is Col - 1, 
+    NewCol >= 0,
+    append(InitialPosition, [NewCol, NewRow], SecondOption),
+    %diagonal_para_cima_direita
+    NewCol1 is Col + 1, 
+    NewCol1 < Length,
+    append(InitialPosition, [NewCol1, NewRow], ThirdOption),
+    append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
 
 /*SWAN*/
+get_valid_moves(swano, _, Length - 1, Length, []).
+get_valid_moves(swano, Col, Row, Length, Moves):-
+    append([Col, Row], [], InitialPosition),
+    %vertical_para_baixo
+    NewRow is Row + 1, 
+    NewRow < Length,
+    append(InitialPosition, [Col, NewRow], FirstOption),
+    %diagonal_para_baixo_esquerda
+    NewCol is Col - 1, 
+    NewCol >= 0,
+    append(InitialPosition, [NewCol, NewRow], SecondOption),
+    %diagonal_para_baixo_direita
+    NewCol1 is Col + 1, 
+    NewCol1 < Length,
+    append(InitialPosition, [NewCol1, NewRow], ThirdOption),
+    append([[FirstOption]], [[SecondOption],[ThirdOption]], Moves).
 
-%vertical_para_baixo
-get_valid_move(swano, Col, Row, Length, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row + 1, NewRow < Length,
-    append([Col, NewRow], Move, Move).
-
-%diagonal_para_baixo_esquerda
-get_valid_move(swano, Col, Row, Length, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row + 1, NewRow < Length,
-    NewCol is Col - 1, NewCol >= 0,
-    append([NewCol, NewRow], Move, Move).
-
-%diagonal_para_baixo_direita
-get_valid_move(swano, Col, Row, Length, Move):-
-    append([Col, Row], [], Move),
-    NewRow is Row + 1, NewRow < Length,
-    NewCol is Col + 1, NewCol < Length,
-    append([NewCol, NewRow], Move, Move).   
-
-
-check_game_over(GameState):-
+/*get_winner(Player1, Player2, Winner)*/
+get_winner(true, false, Player1).
+get_winner(false, true, Player2).
+get_winner(false, false, None).
+/*
+game_over(GameState, Winner):-
     length(GameState, Length),
     nth0(0, GameState, TopRow),
-    member(swano, TopRow),
-    nth0(Length-1, GameState, BottomRow),
-    member(swant, BottomRow).
+    nth0(2, GameState, BottomRow),
+    get_winner(member(swant, TopRow), member(swano, BottomRow), Winner).
+*/
+is_still_playing(GameState, 1):-
+    is_piece_present(GameState, duckt); is_piece_present(GameState, swant).
+is_still_playing(GameState, 2):-
+    is_piece_present(GameState, ducko); is_piece_present(GameState, swano).
+
+/*is_piece_present(+Piece, +GameState)*/
+is_piece_present(Piece,[Piece|_]).
+is_piece_present(Piece,[A|_]):- is_piece_present(Piece,A).
+is_piece_present(Piece,[_|R]):- is_piece_present(Piece,R).
