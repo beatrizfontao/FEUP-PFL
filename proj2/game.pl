@@ -14,7 +14,6 @@ play :-
 start(GameState, PlayerTurn) :-
     display_game(GameState),
     ask_for_move(GameState, Move, Valid, PlayerTurn),
-    write('Valid = '), write(Valid),
     (Valid == false -> write('Invalid Move! You have to move one of your pieces, '), write(PlayerTurn), nl, start(GameState, PlayerTurn), !;
         move(GameState, Move, NewGameState),
         turn(PlayerTurn, NewPlayerTurn),
