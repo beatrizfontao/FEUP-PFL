@@ -3,9 +3,10 @@
 display_game(GameState) :-
     length(GameState, N),
     N < 27,
+    write('  '),
     letters(1, N),
     top(N),
-    matrix(GameState),
+    matrix(GameState, 1),
     bot(N).
 
 letters(Size, Size) :-
@@ -20,6 +21,7 @@ letters(N, Size) :-
     letters(N1, Size).
 
 top(Size) :-
+    write('  '),
     write('\x2554\'),
     top_middle(Size).
 
@@ -37,6 +39,7 @@ top_cross(_) :-
     write('\x2566\').
 
 bot(Size) :-
+    write('  '),
     write('\x255a\'),
     bot_middle(Size).
 
@@ -70,13 +73,18 @@ mid_cross(1) :-
 mid_cross(_) :-
     write('\x256c\').
 
-matrix([L]) :-
+matrix([L], CurrentLine) :-
+    CurrentLine > 0,
+    write(CurrentLine), write(' '),
     line(L).
-matrix([L|R]) :-
+matrix([L|R], CurrentLine) :-
+    CurrentLine > 0,
+    write(CurrentLine), write(' '),
     line(L),
+    NextLine is CurrentLine + 1,
     length(L, N),
-    mid(N),
-    matrix(R).
+    write('  '), mid(N),
+    matrix(R, NextLine).
 
 line([]) :- write('\x2551\'), nl.
 line([C|R]) :-
