@@ -12,43 +12,71 @@ move(GameState, Move, NewGameState) :-
     change(GameState, Col, Row, e, NewGameStateTemp),
     change(NewGameStateTemp, NewCol, NewRow, Piece, NewGameState).
 
-check_turn(1, duckt, true).
-check_turn(1, swant, true).
-check_turn(2, ducko, true).
-check_turn(2, swano, true).
+/*check_turn(+Player, +Piece, -CheckTurn)*/
+check_turn(player1, duckt, true).
+check_turn(player1, swant, true).
+check_turn(player2, ducko, true).
+check_turn(player2, swano, true).
 check_turn(_, _, false).
 
-/*
-valid_moves(GameState, Piece, ListOfMoves):-
+/*valid_moves(+GameState, +Player, -ListOfMoves)*/
+valid_moves(GameState, player1, ListOfMoves):-
     length(GameState, Length),
-    Col is,
-    Row is,
-    findall(Piece, get_valid_move(Piece, Col, Row, Length, Move), ListOfMoves).
-*/
 
-/*
-Dimensões do tabuleiro? - verificar se passa dos limites
+    find_pieces(GameState, ducko, DuckPositions),
+    get_piece_moves(DuckPositions, ducko, Length, [], DuckMoves),
 
-PLAYER 1:
-duckt: pode descer na vertical ou na diagonal:
-- Col igual, Row + 1
-- Col - 1, Row + 1 
-- Col + 1, Row + 1
-swant: pode subir na vertical ou na diagonal:
-- Col igual, Row - 1
-- Col - 1, Row - 1 
-- Col + 1, Row - 1
+    find_pieces(GameState, swano, SwanPositions),
+    get_piece_moves(SwanPositions, swano, Length, [], SwanMoves),
 
-PLAYER 2:
-ducko: pode subir na vertical ou na diagonal:
-- Col igual, Row - 1
-- Col - 1, Row - 1 
-- Col + 1, Row - 1
-swano: pode descer na vertical ou na diagonal:
-- Col igual, Row + 1
-- Col - 1, Row + 1 
-- Col + 1, Row + 1
-*/ 
+    append(SwanMoves, DuckMoves, ListOfMoves).
+
+valid_moves(GameState, player2, ListOfMoves):-
+    length(GameState, Length),
+
+    find_pieces(GameState, duckt, DuckPositions),
+    get_piece_moves(DuckPositions, duckt, Length, [], DuckMoves),
+
+    find_pieces(GameState, swant, SwanPositions),
+    get_piece_moves(SwanPositions, swant, Length, [], SwanMoves),
+
+    append(SwanMoves, DuckMoves, ListOfMoves).
+
+valid_moves(_, _, []).
+
+get_piece_moves([], _, _, ListOfMoves, ListOfMoves).
+get_piece_moves([Position|T], Piece, Length, ListOfMoves, Result) :-
+    nth0(0, Position, Col),
+    nth0(1, Position, Row),
+    get_valid_moves(Piece, Col, Row, Length, Moves),
+    append(ListOfMoves, Moves, ValidMoves),
+    get_piece_moves(T, Piece, Length, ValidMoves, Result).
+
+/*find_pieces(+GameState, +Piece, -Positions)*/
+find_pieces(GameState, Piece, Positions):-
+    get_all_pieces(GameState, 0, Piece, [], Positions).
+
+/*get_all_pieces(+GameState, +CurrentRow, +Piece, +Positions, -Result)*/
+get_all_pieces([], _, _, Positions, Positions).
+get_all_pieces([Row|T], CurrentRow, Piece, Positions, Result):-
+    NextRow is CurrentRow + 1,
+    row_pieces(Row, CurrentRow, Piece, NewPositions),
+    append(Positions, NewPositions, NewPositions2),
+    get_all_pieces(T, NextRow, Piece, NewPositions2, Result).
+
+/*row_pieces(+Row, +RowIndex, +Piece, -Positions)*/
+row_pieces(Row, RowIndex, Piece, Result):-
+    row_pieces(Row, RowIndex, 0, Piece, [], Result).
+
+/*row_pieces(+Row, +RowIndex, +Col, +Piece, +Positions, -Result)*/
+row_pieces([], _, _, _, Positions, Positions).
+row_pieces([Piece|T], RowIndex, Col, Piece, Positions, Result):-
+    append([[Col, RowIndex]], Positions, NewPositions),
+    NextCol is Col + 1,
+    row_pieces(T, RowIndex, NextCol, Piece, NewPositions, Result).
+row_pieces([_|T], RowIndex, Col, Piece, Positions, Result) :-
+    NextCol is Col + 1,
+    row_pieces(T, RowIndex, NextCol, Piece, Positions, Result).
 
 /*--------------------------PLAYER 1--------------------------*/
 
