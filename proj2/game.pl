@@ -12,9 +12,8 @@ play :-
 
 
 start(GameState, PlayerTurn) :-
-    write('\33\[2J'),
     playernum(PlayerTurn, N),
-    nl, write('Player '),  write(N), write(' turn'), nl, nl,
+    write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
     display_game(GameState), 
     ask_for_move(GameState, Move, Valid, PlayerTurn),
     (Valid == false ->nl, write('Invalid Move!'), nl, start(GameState, PlayerTurn), !;
