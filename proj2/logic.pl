@@ -7,8 +7,6 @@ move(GameState, Move, NewGameState) :-
     nth0(2, Move, NewCol),
     nth0(3, Move, NewRow),
     get_piece(GameState, Col, Row, Piece),
-    %check_turn(),
-    %check_valid_move(),
     change(GameState, Col, Row, e, NewGameStateTemp),
     check_upgrade(NewGameStateTemp, NewCol, NewRow, Piece, NewGameState).
 
@@ -29,20 +27,25 @@ game_over(GameState, Winner) :-
     LastRowNum is S - 1,
     nth0(0, GameState, FirstRow),
     check_game_over(S, LastRowNum, FirstRow, 0, TempWinner),
-    (TempWinner == ducko -> Winner = player1, !;
+    (TempWinner == player1 -> Winner = player1, !;
         nth0(LastRowNum, GameState, LastRow),
         check_game_over(S, LastRowNum, LastRow, LastRowNum, TempWinner2),
-        (TempWinner2 == duckt -> Winner = player2,!;
-            Winner = e
+        (TempWinner2 == player2 -> Winner = player2,!;
+            (is_still_playing(GameState, player1) -> 
+                (is_still_playing(GameState,player2) -> 
+                    Winner = e;
+                    Winner = player1 
+                );
+                Winner = player2
+            )
         )
-    )
-    .
+    ).
 
 check_game_over(0,_, _, _, Winner) :- team(e, Winner), !.
 check_game_over(Size, BoardSize, [Piece | T], RowNum, Winner) :-
-    (Piece = swano, RowNum =:= 0) -> team(Winner, Piece);
+    (Piece = swano, RowNum =:= 0) -> winner(Piece, Winner);
         (
-            (Piece = swant, RowNum =:= BoardSize) -> team(Winner, Piece);
+            (Piece = swant, RowNum =:= BoardSize) -> winner(Piece, Winner);
             S is Size - 1,
             check_game_over(S, BoardSize, T, RowNum, Winner)
         )
@@ -213,24 +216,10 @@ valid_capture(GameState, Move, Piece):-
             false; true)
     ).
 
-/*get_winner(+Player1, +Player2, -Winner)*/
-get_winner(true, false, 1).
-get_winner(false, true, 2).
-get_winner(false, false, 0).
-
-/*
-game_over(GameState, Winner):-
-    length(GameState, Length),
-    nth0(0, GameState, TopRow),
-    Ind is Length - 1,
-    nth0(Ind, GameState, BottomRow),
-    get_winner(member(swant, TopRow), member(swano, BottomRow), Winner).
-*/
-
-is_still_playing(GameState, 1):-
-    is_piece_present(GameState, duckt); is_piece_present(GameState, swant).
-is_still_playing(GameState, 2):-
-    is_piece_present(GameState, ducko); is_piece_present(GameState, swano).
+is_still_playing(GameState, player1):-
+    is_piece_present(ducko, GameState); is_piece_present(swano, GameState).
+is_still_playing(GameState, player2):-
+    is_piece_present(duckt, GameState); is_piece_present(swant, GameState).
 
 /*is_piece_present(+Piece, +GameState)*/
 is_piece_present(Piece,[Piece|_]).

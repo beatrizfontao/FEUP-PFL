@@ -14,10 +14,13 @@ team(e, e).
 
 winner(swano, player1).
 winner(swant, player2).
-winner(e, no).
+winner(e, e).
 
 turn(player1, player2).
 turn(player2, player1).
+
+playernum(player1, 1).
+playernum(player2, 2).
 
 row(1, 'A').
 row(1, '1').
