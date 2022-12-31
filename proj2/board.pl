@@ -37,7 +37,4 @@ replace(I, L, [H|T], [H|R]) :-
     I1 is I-1,
     replace(I1, L, T, R).
 
-get_piece(GameState, Col, Row, Piece) :-
-    nth0(Row, GameState, RowList),
-    nth0(Col, RowList, Piece).
     

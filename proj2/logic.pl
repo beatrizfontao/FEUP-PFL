@@ -28,16 +28,22 @@ game_over(GameState, Winner) :-
     length(GameState, S),
     LastRowNum is S - 1,
     nth0(0, GameState, FirstRow),
-    check_game_over(S, FirstRow, 0, Winner),
-    nth0(LastRowNum, GameState, LastRow),
-    check_game_over(S, LastRow, LastRowNum, Winner).
+    check_game_over(S, LastRowNum, FirstRow, 0, TempWinner),
+    (TempWinner == ducko -> Winner = player1, !;
+        nth0(LastRowNum, GameState, LastRow),
+        check_game_over(S, LastRowNum, LastRow, LastRowNum, TempWinner2),
+        (TempWinner2 == duckt -> Winner = player2,!;
+            Winner = e
+        )
+    )
+    .
 
-check_game_over(0, _, _, Winner) :- team(e, Winner), !.
-check_game_over(Size, [Piece | T], RowNum, Winner) :-
-    (Piece = swano, RowNum =:= 0) -> team(Piece, Winner);
+check_game_over(0,_, _, _, Winner) :- team(e, Winner), !.
+check_game_over(Size, BoardSize, [Piece | T], RowNum, Winner) :-
+    (Piece = swano, RowNum =:= 0) -> team(Winner, Piece);
         (
-            (Piece = swant, RowNum =:= Size) -> team(Piece, Winner);
+            (Piece = swant, RowNum =:= BoardSize) -> team(Winner, Piece);
             S is Size - 1,
-            check_game_over(S, T, RowNum, Winner)
+            check_game_over(S, BoardSize, T, RowNum, Winner)
         )
     .
