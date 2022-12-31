@@ -12,6 +12,9 @@ winner(swano, player1).
 winner(swant, player2).
 winner(e, no).
 
+turn(player1, player2).
+turn(player2, player1).
+
 row(1, 'A').
 row(1, '1').
 row(2, 'B').
@@ -64,3 +67,7 @@ row(25, 'Y').
 row(25, '25').
 row(26, 'Z').
 row(26, '26').
+
+get_piece(GameState, Col, Row, Piece) :-
+    nth0(Row, GameState, RowList),
+    nth0(Col, RowList, Piece).

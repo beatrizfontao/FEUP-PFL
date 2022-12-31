@@ -1,6 +1,6 @@
 :- consult('utils.pl').
 
-ask_for_move(Move) :-
+ask_for_move(GameState, Move, Valid, PlayerTurn) :-
     write('Initial Col: '),
     read_col(Col),
     write('Initial Row: '),
@@ -13,7 +13,13 @@ ask_for_move(Move) :-
     R is Row - 1,
     NewC is NewCol - 1,
     NewR is NewRow - 1,
-    append([C, R], [NewC, NewR], Move).
+    get_piece(GameState, C, R, Piece),
+    (PlayerTurn == player1, (Piece == ducko; Piece == swano) -> append([C, R], [NewC, NewR], Move), Valid = y;
+        (PlayerTurn == player2, (Piece == duckt; Piece == swant) -> append([C, R], [NewC, NewR], Move), Valid = y;
+            append([], [], Move), Valid = n
+        )
+    )
+    .
 
 read_col(Column) :-
     read_line(Input),
