@@ -26,4 +26,3 @@ start(GameState, PlayerTurn) :-
         )
     )
     .
-    
