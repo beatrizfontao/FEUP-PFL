@@ -16,7 +16,7 @@ ask_for_move(GameState, Move, Valid, PlayerTurn) :-
     get_piece(GameState, C, R, Piece),
     (PlayerTurn == player1, (Piece == ducko; Piece == swano) -> append([C, R], [NewC, NewR], Move), is_move_valid(GameState, PlayerTurn, Piece, Move, Valid);
         (PlayerTurn == player2, (Piece == duckt; Piece == swant) -> append([C, R], [NewC, NewR], Move), is_move_valid(GameState, PlayerTurn, Piece, Move, Valid);
-            append([], [], Move), Valid = n
+            append([], [], Move), Valid = false
         )
     )
     .

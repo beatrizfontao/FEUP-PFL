@@ -6,15 +6,17 @@
 :- consult('logic.pl').
 
 play :-
-    /*menu(Size) */
+    /*menu(Size, GameMode) */
     initial_state(5, GameState),
     start(GameState, player1).
 
 
 start(GameState, PlayerTurn) :-
-    display_game(GameState),
+    playernum(PlayerTurn, N),
+    write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
+    display_game(GameState), 
     ask_for_move(GameState, Move, Valid, PlayerTurn),
-    (Valid == false -> write('Invalid Move! You have to move one of your pieces, '), write(PlayerTurn), nl, start(GameState, PlayerTurn), !;
+    (Valid == false ->nl, write('Invalid Move!'), nl, start(GameState, PlayerTurn), !;
         move(GameState, Move, NewGameState),
         turn(PlayerTurn, NewPlayerTurn),
         game_over(NewGameState, Winner),
