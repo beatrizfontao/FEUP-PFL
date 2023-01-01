@@ -16,6 +16,19 @@ winner(swano, player1).
 winner(swant, player2).
 winner(e, e).
 
+
+different_team(ducko, swant).
+different_team(swant, ducko).
+
+different_team(ducko, duckt).
+different_team(duckt, ducko).
+
+different_team(duckt, swano).
+different_team(swano, duckt).
+
+different_team(swant, swano).
+different_team(swano, swant).
+
 turn(player1, player2).
 turn(player2, player1).
 

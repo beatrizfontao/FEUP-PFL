@@ -24,23 +24,30 @@ get_row_value([Piece|T], Player, Value, Result) :-
     ).
 
 /*choose_move(+GameState, +Player, +Level, -Move)*/
+/*
 choose_move(GameState, Player, 2, Move) :-
     valid_moves(GameState, Player, ListOfMoves),
-    get_best_move(GameState, ListOfMoves, Player, 0, [], Move).
-    
+    get_best_move(GameState, ListOfMoves, Player, 0, [], Move).*/
+
+choose_move(GameState, Player, 2, Move) :-
+    length(GameState, Length),
+    valid_moves(GameState, Player, ListOfMoves),
+    MaxAdvantage is (-10) * Length,
+    get_best_move(GameState, ListOfMoves, Player, MaxAdvantage, [], Move).
+
+choose_move(GameState, Player, 1, Move) :-
+    valid_moves(GameState, Player, ListOfMoves),
+    length(ListOfMoves, Size),
+    random(0, Size, ChosenMove),
+    nth0(ChosenMove, ListOfMoves, Move).
+
 /*get_best_move(+GameState, +ListOfMoves, +Player, +MaxAdvantage, +CurrentBestMove, -BestMove)*/
 get_best_move(_, [], _, _, CurrentBestMove, CurrentBestMove).
 get_best_move(GameState, [Move|T], Player, MaxAdvantage, CurrentBestMove, BestMove) :-
     move(GameState, Move, GameStateTemp),
     check_values(GameStateTemp, Player, Advantage),
-    nth0(0, Move, Col),
-    nth0(1, Move, Row),
-    get_piece(GameState, Col, Row, Piece),
-    (MaxAdvantage < Advantage -> 
-        (valid_capture(GameState, Move, Piece) ->
-            get_best_move(GameState, T, Player, Advantage, Move, BestMove);
-            get_best_move(GameState, T, Player, MaxAdvantage, CurrentBestMove, BestMove)
-            );
+    (MaxAdvantage =< Advantage -> 
+        get_best_move(GameState, T, Player, Advantage, Move, BestMove);
         get_best_move(GameState, T, Player, MaxAdvantage, CurrentBestMove, BestMove)
     ).
 
