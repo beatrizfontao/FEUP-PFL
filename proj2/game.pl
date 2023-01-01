@@ -4,11 +4,14 @@
 
 :- consult('input.pl').
 :- consult('logic.pl').
+:- consult('menu.pl').
 
 play :-
-    /*menu(Size, GameMode) */
-    initial_state(5, GameState),
-    start(GameState, player1).
+    menu(Size, GameMode),
+    (GameMode == pvp ->
+    initial_state(Size, GameState),
+    start(GameState, player1); fail
+    ).
 
 
 start(GameState, PlayerTurn) :-

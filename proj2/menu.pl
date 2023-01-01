@@ -1,4 +1,3 @@
-
 game_mode(1, pvp).
 game_mode(2, pvai).
 game_mode(3, aivai).
@@ -11,21 +10,26 @@ game_mode(8, pvgreedyai).
 difficulty(1, random).
 difficulty(2, greedy).
 
+game_mode_choice(pvai, random, pvrandomai).
+game_mode_choice(pvai, greedy, pvgreedyai).
+game_mode_choice(aivai, random, randomaivai).
+game_mode_choice(aivai, greedy, greedyaivai).
+
+game_choice(pvp, pvp).
+game_choice(pvai, GameMode) :-
+    display_bot_difficulty(TempGameMode),
+    game_mode_choice(pvai, TempGameMode, GameMode).
+game_choice(aivai, GameMode) :-
+    display_bot_difficulty(TempGameMode),
+    game_mode_choice(aivai, TempGameMode, GameMode).
+
 menu(Size, GameMode) :-
-    Size is 5,
     display_main_menu(TempGameMode),
-    ((TempGameMode == pvai; TempGameMode == aivai) -> 
-        (display_bot_difficulty(TempGameMode2) ->
-            (TempGameMode == pvai, TempGameMode2 == random) -> GameMode = pvrandomai;
-            (TempGameMode == pvai, TempGameMode2 == greedy) -> GameMode = pvgreedyai;
-            (TempGameMode == aivai, TempGameMode2 == random) -> GameMode = randomaivai;
-            (TempGameMode == aivai, TempGameMode2 == greedy) -> GameMode = greedyaivai;
-            !
-        );
-        GameMode = pvp
-    ).
+    game_choice(TempGameMode, GameMode),
+    choose_size(Size).
 
 menu_header :-
+    write('\33\[2J'),
     write('                                                                         ,-"" "".'),nl,
     write('                                                                       ,\'  ____  `.'),nl,
     write('   _   _      _        ___          _                                ,\'  ,\'    `.  `._'),nl,
@@ -51,13 +55,18 @@ main_menu_options :-
 
 choose_game_mode(GameMode) :-
     write('                                    Choose the Game Mode:'),
-    read_col(Mode),
+    read_input(Mode),
     nl,
-    (Mode \= 1, Mode \= 2, Mode \= 3, Mode \= 4-> 
-        write('                             Choose a valid Game Mode(1,2,3 or 4)!'), nl,
-        choose_game_mode(GameMode), !;
-        game_mode(Mode, GameMode)
-    ).
+    mode(Mode, GameMode).
+
+mode(Input, GameMode) :-
+    Input > 0,
+    Input < 5,
+    game_mode(Input, GameMode), !.
+
+mode(_, GameMode) :-
+    write('                             Choose a valid Game Mode(1,2,3 or 4)!'), nl,
+    choose_game_mode(GameMode).
 
 %BotMenu
 
@@ -73,9 +82,34 @@ difficulty_menu_options :-
 
 choose_bot_difficulty(GameMode) :-
     write('                                    Choose Bot Difficulty:'),
-    read_col(Mode),
-    (Mode \= 1, Mode \= 2 -> 
-        write('                            Choose a valid difficulty(1 or 2)!'), nl,
-        choose_bot_difficulty(GameMode), !;
-        difficulty(Mode, GameMode)
-    ).
+    read_input(Mode),
+    bot_mode(Mode, GameMode).
+
+bot_mode(Input, GameMode) :-
+    Input > 0,
+    Input < 3,
+    difficulty(Input, GameMode), !.
+
+bot_mode(_, GameMode) :-
+    write('                            Choose a valid difficulty(1 or 2)!'), nl,
+    choose_bot_difficulty(GameMode).
+
+choose_size(Size) :-
+    nl, write('                               Choose Board Size (between 5 and 12):'),
+    read_input(TempSize), nl,
+    size(TempSize, Size).
+
+size(Input, Size) :-
+    Input < 13,
+    Input > 4,
+    Size is Input, !.
+
+size(_, Size) :-
+    write('                               Choose a valid size(between 5 and 12)!'), nl,
+    choose_size(Size).
+
+read_input(FinalInput) :-
+    read_line(Input),
+    atom_codes(TempInput, Input),
+    atom_chars(TempInput, ListChars),
+    number_chars(FinalInput, ListChars).
