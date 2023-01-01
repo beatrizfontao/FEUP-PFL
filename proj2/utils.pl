@@ -22,6 +22,20 @@ turn(player2, player1).
 playernum(player1, 1).
 playernum(player2, 2).
 
+value(ducko, 10).
+value(swano, 50).
+value(duckt, 10).
+value(swant, 50).
+value(e, 0).
+
+piece(player1, ducko).
+piece(player1, swano).
+piece(player2, duckt).
+piece(player2, swant).
+
+enemy(player1, player2).
+enemy(player2, player1).
+
 row(1, 'A').
 row(1, '1').
 row(2, 'B').

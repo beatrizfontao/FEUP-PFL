@@ -61,28 +61,21 @@ check_turn(_, _, false).
 /*valid_moves(+GameState, +Player, -ListOfMoves)*/
 valid_moves(GameState, player1, ListOfMoves):-
     length(GameState, Length),
-
     find_pieces(GameState, ducko, DuckPositions),
     get_piece_moves(DuckPositions, ducko, Length, [], DuckMoves),
-
     find_pieces(GameState, swano, SwanPositions),
     get_piece_moves(SwanPositions, swano, Length, [], SwanMoves),
-
     append(SwanMoves, DuckMoves, ListOfMoves).
-
 valid_moves(GameState, player2, ListOfMoves):-
     length(GameState, Length),
-
     find_pieces(GameState, duckt, DuckPositions),
     get_piece_moves(DuckPositions, duckt, Length, [], DuckMoves),
-
     find_pieces(GameState, swant, SwanPositions),
     get_piece_moves(SwanPositions, swant, Length, [], SwanMoves),
-
     append(SwanMoves, DuckMoves, ListOfMoves).
-
 valid_moves(_, _, []).
 
+/*get_piece_moves(+ListOfPositions, +Piece, +Length, +ListOfMoves, -Result) */
 get_piece_moves([], _, _, ListOfMoves, ListOfMoves).
 get_piece_moves([Position|T], Piece, Length, ListOfMoves, Result) :-
     nth0(0, Position, Col),
@@ -126,10 +119,10 @@ is_move_valid(GameState, PlayerTurn, Piece, Move, Valid) :-
         Valid = false
     ).
 
+/*get_valid_moves(+Piece, +Col, +Row, +Length, -Moves)*/
+
 /*--------------------------PLAYER 1--------------------------*/
-
 /*DUCK*/
-
 get_valid_moves(ducko, Col, Row, Length, Moves):-
 append([Col, Row], [], InitialPosition),
 %vertical_para_baixo
@@ -166,7 +159,6 @@ get_valid_moves(swano, Col, Row, Length, Moves):-
         ); append([], [], Moves).
 
 /*--------------------------PLAYER 2--------------------------*/
-
 /*DUCK*/
 get_valid_moves(duckt, Col, Row, Length, Moves):-
     append([Col, Row], [], InitialPosition),
