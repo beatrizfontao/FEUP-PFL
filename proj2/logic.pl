@@ -210,7 +210,7 @@ get_second_option(GameState, duckt, InitialPosition, ValidMoves) :-
     NewCol is Col - 1,
     NewRow is Row - 1,
     NewRow >= 0,
-    NewCol < Length,
+    NewCol >= 0,
     append(InitialPosition, [NewCol, NewRow], ValidMoves),
     valid_capture(GameState, ValidMoves, duckt).
 
@@ -221,7 +221,7 @@ get_second_option(GameState, swano, InitialPosition, ValidMoves) :-
     NewCol is Col - 1,
     NewRow is Row - 1,
     NewRow >= 0,
-    NewCol < Length,
+    NewCol >= 0,
     append(InitialPosition, [NewCol, NewRow], ValidMoves),
     valid_capture(GameState, ValidMoves, swano).
 
@@ -229,9 +229,10 @@ get_second_option(GameState, swant, InitialPosition, ValidMoves) :-
     nth0(0, InitialPosition, Col),
     nth0(1, InitialPosition, Row),
     length(GameState, Length),
-    NewCol is Col + 1,
+    NewCol is Col - 1,
     NewRow is Row + 1,
-    NewCol < Length,
+    NewCol >= 0,
+    NewRow < Length,
     append(InitialPosition, [NewCol, NewRow], ValidMoves),
     valid_capture(GameState, ValidMoves, swant).
 

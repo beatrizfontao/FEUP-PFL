@@ -33,11 +33,11 @@ Checks if any of the players (1 or 2) won the game. If none won (e), the game co
 */
 check_winner(GameState, player1, _, _) :-
     write('\33\[2J'),
-    nl, write('Player 1 Wins!'),
+    nl, write('Player 1 Wins!'), nl, 
     display_game(GameState), !.
 check_winner(GameState, player2, _, _) :-
     write('\33\[2J'),
-    nl, write('Player 2 Wins!'), 
+    nl, write('Player 2 Wins!'), nl, 
     display_game(GameState), !.
 check_winner(GameState, e, PlayerTurn, GameMode) :-
     turn(PlayerTurn, NewPlayerTurn),
