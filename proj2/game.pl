@@ -7,16 +7,27 @@
 :- consult('menu.pl').
 :- consult('bot.pl').
 
+/*
+  Displays the menu, builds the initial board and starts the game
+*/
 play :-
     menu(Size, GameMode),
     initial_state(Size, GameState),
     start(GameMode, GameState, player1).
 
-start(pvp, GameState, PlayerTurn) :-
+/*
+    display(+PlayerTurn, +GameState)
+    Displays the turn of the current player and displays the board
+*/
+display(PlayerTurn, GameState) :-
     playernum(PlayerTurn, N),
     write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
-    display_game(GameState), 
-    ask_for_move(GameState, Move, Valid, PlayerTurn),
+    display_game(GameState).
+
+
+start(pvp, GameState, PlayerTurn) :-
+    display(PlayerTurn, GameState),
+    ask_for_move(GameState, PlayerTurn, Move, Valid),
     (Valid == false ->nl, write('Invalid Move!'), nl, start(GameState, PlayerTurn), !;
         move(GameState, Move, NewGameState),
         turn(PlayerTurn, NewPlayerTurn),
@@ -30,10 +41,8 @@ start(pvp, GameState, PlayerTurn) :-
     ).
 
 start(pvgreedyai, GameState, player1) :-
-    playernum(player1, N),
-    write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
-    display_game(GameState), 
-    ask_for_move(GameState, Move, Valid, player1),
+    display(player1, GameState), 
+    ask_for_move(GameState, player1, Move, Valid),
     (Valid == false ->nl, write('Invalid Move!'), nl, start(GameState, player1), !;
         move(GameState, Move, NewGameState),
         turn(player1, NewPlayerTurn),
@@ -48,9 +57,7 @@ start(pvgreedyai, GameState, player1) :-
 
 start(pvgreedyai, GameState, player2) :-
     sleep(2),
-    playernum(player2, N),
-    write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
-    display_game(GameState), 
+    display_game(player2, GameState), 
     choose_move(GameState, player2, 2, Move),
     move(GameState, Move, NewGameState),
     turn(player2, NewPlayerTurn),
@@ -64,9 +71,7 @@ start(pvgreedyai, GameState, player2) :-
 
 start(greedyaivai, GameState, PlayerTurn) :-
     sleep(2),
-    playernum(PlayerTurn, N),
-    write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
-    display_game(GameState), 
+    display(PlayerTurn, GameState), 
     choose_move(GameState, PlayerTurn, 2, Move),
     move(GameState, Move, NewGameState),
     game_over(NewGameState, Winner),
@@ -78,10 +83,8 @@ start(greedyaivai, GameState, PlayerTurn) :-
     ).
 
 start(pvrandomai, GameState, player1) :-
-    playernum(player1, N),
-    write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
-    display_game(GameState), 
-    ask_for_move(GameState, Move, Valid, player1),
+    display_game(player1, GameState), 
+    ask_for_move(GameState, player1, Move, Valid),
     (Valid == false ->nl, write('Invalid Move!'), nl, start(GameState, player1), !;
         move(GameState, Move, NewGameState),
         turn(player1, NewPlayerTurn),
@@ -111,9 +114,7 @@ start(pvrandomai, GameState, player2) :-
 
 start(randomaivai, GameState, PlayerTurn) :-
     sleep(2),
-    playernum(PlayerTurn, N),
-    write('\33\[2J'), nl, write('Player '),  write(N), write(' turn'), nl, nl,
-    display_game(GameState),
+    display_game(PlayerTurn, GameState),
     choose_move(GameState, PlayerTurn, 1, Move),
     move(GameState, Move, NewGameState),
     game_over(NewGameState, Winner),

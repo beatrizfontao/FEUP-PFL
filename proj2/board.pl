@@ -1,5 +1,9 @@
 :- consult('display.pl').
 
+/*
+initial_state(+Size, -GameState)
+Given a size, it crates and returns the corresponding gamestate
+*/
 initial_state(Size, GameState) :- 
     S is Size - 2,
     create_line(Size, duckt, [], Line),
@@ -7,6 +11,10 @@ initial_state(Size, GameState) :-
     create_line(Size, ducko, [], Line2),
     add_final(Line2, Board, GameState).
 
+/*
+init(+Size, +Col, +CurrentBoard, -FinalBoard)
+Constructs the initial board
+*/
 init(_, 0, FinalBoard, FinalBoard).
 init(Size, Col, CurrentBoard, FinalBoard) :-
     Col > 0,
@@ -14,6 +22,9 @@ init(Size, Col, CurrentBoard, FinalBoard) :-
     create_line(Size, e, [], Line),
     init(Size, C, [Line|CurrentBoard], FinalBoard).
 
+/*
+create_line(+Size, +Player, +CurrentLine, +FinalLine)
+*/
 create_line(0, _, FinalLine, FinalLine).
 create_line(Size, Player, CurrentLine, FinalLine) :-
     Size > 0,
