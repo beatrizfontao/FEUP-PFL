@@ -30,7 +30,7 @@ different_team(swant, swano).
 different_team(swano, swant).
 
 turn(player1, player2).
-turn(player2, player1).
+turn(player2, player1). 
 
 playernum(player1, 1).
 playernum(player2, 2).

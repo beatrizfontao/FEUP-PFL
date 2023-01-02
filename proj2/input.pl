@@ -1,8 +1,6 @@
-:- consult('utils.pl').
-
 /*
-  ask_for_move(+GameState, +PlayerTurn, -Move, -Valid)
-  Reads the move the user wants to make and checks if it is valid
+ask_for_move(+GameState, +PlayerTurn, -Move, -Valid)
+Reads the move the user wants to make and checks if it is valid
 */
 ask_for_move(GameState, PlayerTurn, Move, Valid) :-
     write('Initial Col: '),
@@ -29,8 +27,8 @@ ask_for_move(GameState, PlayerTurn, Move, Valid) :-
     ).
 
 /*
-  read_col(-Column)
-  Reads the input of the user, checks if it is a valid column(A, B, C, D, ...) and transforms it in the corresponding number
+read_col(-Column)
+Reads the input of the user, checks if it is a valid column(A, B, C, D, ...) and transforms it in the corresponding number
 */
 read_col(Column) :-
     read_line(Input),
@@ -40,8 +38,8 @@ read_col(Column) :-
     row(Column, String).
 
 /*
-  read_row(-Row)
-  Reads the input of the user, checks if it is a valid row(1, 2, 3, ...) and transforms it in the corresponding number
+read_row(-Row)
+Reads the input of the user, checks if it is a valid row(1, 2, 3, ...) and transforms it in the corresponding number
 */
 read_row(Row) :-
     read_line(Input),

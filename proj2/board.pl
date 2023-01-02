@@ -1,5 +1,3 @@
-:- consult('display.pl').
-
 /*
 initial_state(+Size, -GameState)
 Given a size, it crates and returns the corresponding gamestate
@@ -31,17 +29,27 @@ create_line(Size, Player, CurrentLine, FinalLine) :-
     S is Size - 1,
     create_line(S, Player, [Player|CurrentLine], FinalLine).
 
+/*
+add_final(+Line, +CurrentBoard, -FinalBoard)
+Adds the final line to the current board
+*/
 add_final([], FinalBoard, FinalBoard).
 add_final(Line, CurrentBoard, FinalBoard) :-
     add_final([], [Line|CurrentBoard], FinalBoard).
 
-% Define a predicate to change an element in the matrix
+/*
+change(+GameState, +Col, +Row, +Piece, -NewGameState)
+Replaces the given cell (col and row) with the piece
+*/
 change(GameState, Col, Row, Piece, NewGameState) :-
     nth0(Row, GameState, RowList),
     replace(Col, Piece, RowList, NewRowList),
     replace(Row, NewRowList, GameState, NewGameState). 
 
-% Define a predicate to replace an element in a list
+/*
+replace(+I, +L, +List1, -List2)
+Replaces the element of index I of List1
+*/
 replace(0, L, [_|T], [L|T]).
 replace(I, L, [H|T], [H|R]) :-
     I > 0,

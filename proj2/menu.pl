@@ -1,18 +1,18 @@
 /*
-  Main Menu Game Modes (pvp, pvai and aivsai)
+Main Menu Game Modes (pvp, pvai and aivsai)
 */
 game_mode(1, pvp).
 game_mode(2, pvai).
 game_mode(3, aivai).
 
 /*
-  Menu option for difficulty
+Menu option for difficulty
 */
 difficulty(1, random).
 difficulty(2, greedy).
 
 /*
-  Specific game mode for p vs bot and bot vs bot based on difficulty 
+Specific game mode for p vs bot and bot vs bot based on difficulty 
 */
 game_mode_choice(pvai, random, pvrandomai).
 game_mode_choice(pvai, greedy, pvgreedyai).
@@ -20,8 +20,8 @@ game_mode_choice(aivai, random, randomaivai).
 game_mode_choice(aivai, greedy, greedyaivai).
 
 /*
-  game_choice(+Mode, -GameMode)
-  Game mode chosen by the user. If the game involves bots, also chooses difficulty
+game_choice(+Mode, -GameMode)
+Game mode chosen by the user. If the game involves bots, also chooses difficulty
 */
 game_choice(pvp, pvp).
 game_choice(pvai, GameMode) :-
@@ -32,8 +32,8 @@ game_choice(aivai, GameMode) :-
     game_mode_choice(aivai, TempGameMode, GameMode).
 
 /*
-  menu(-Size, -Size)
-  Displays the Main Menu and makes the user choose the Game Mode and the Size of the board
+menu(-Size, -Size)
+Displays the Main Menu and makes the user choose the Game Mode and the Size of the board
 */
 menu(Size, GameMode) :-
     display_main_menu(TempGameMode),
@@ -41,7 +41,7 @@ menu(Size, GameMode) :-
     choose_size(Size).
 
 /*
-  Displays on screen the title of the game
+Displays on screen the title of the game
 */
 menu_header :-
     write('\33\[2J'),
@@ -56,7 +56,7 @@ menu_header :-
     write('---------------------------------------------`----------------------------------------------'),nl, nl, nl.
 
 /*
-  Displays on screen the Main Menu options
+Displays on screen the Main Menu options
 */
 main_menu_options :-
     write('                                            Menu'),nl,nl,
@@ -65,7 +65,7 @@ main_menu_options :-
     write('                                      * 3. Bot vs Bot *'),nl,nl.
 
 /*
-  Displays on screen the Bot Difficulty options
+Displays on screen the Bot Difficulty options
 */
 difficulty_menu_options :-
     write('                                        Bot Difficulty:'),nl, nl,  
@@ -73,8 +73,8 @@ difficulty_menu_options :-
     write('                                      * 2. Level 2 Bot *'),nl,nl.
 
 /*
-  display_main_menu(-GameMode)
-  Displays the title and Main Menu options and makes the user choose the Game Mode
+display_main_menu(-GameMode)
+Displays the title and Main Menu options and makes the user choose the Game Mode
 */
 display_main_menu(GameMode) :-
     menu_header,
@@ -82,8 +82,8 @@ display_main_menu(GameMode) :-
     choose_game_mode(GameMode).
 
 /*
-  choose_game_mode(-GameMode)
-  Reads the input of the user and chooses the Game Mode based on their choice
+choose_game_mode(-GameMode)
+Reads the input of the user and chooses the Game Mode based on their choice
 */
 choose_game_mode(GameMode) :-
     write('                                    Choose the Game Mode:'),
@@ -92,8 +92,8 @@ choose_game_mode(GameMode) :-
     mode(Mode, GameMode).
 
 /*
-  mode(+Input, -GameMode)
-  Checks if the input is valid and chooses the Game Mode based on their choice
+mode(+Input, -GameMode)
+Checks if the input is valid and chooses the Game Mode based on their choice
 */
 mode(Input, GameMode) :-
     Input > 0,
@@ -104,8 +104,8 @@ mode(_, GameMode) :-
     choose_game_mode(GameMode).
 
 /*
-  display_bot_difficulty(-GameMode)
-  Displays the title and Bot Difficulty options and makes the user choose the difficulty
+display_bot_difficulty(-GameMode)
+Displays the title and Bot Difficulty options and makes the user choose the difficulty
 */
 display_bot_difficulty(GameMode) :-
     menu_header,
@@ -113,8 +113,8 @@ display_bot_difficulty(GameMode) :-
     choose_bot_difficulty(GameMode).
 
 /*
-  choose_bot_difficulty(-GameMode)
-  Reads the input of the user and chooses the Bot Difficulty based on their choice
+choose_bot_difficulty(-GameMode)
+Reads the input of the user and chooses the Bot Difficulty based on their choice
 */
 choose_bot_difficulty(GameMode) :-
     write('                                    Choose Bot Difficulty:'),
@@ -122,8 +122,8 @@ choose_bot_difficulty(GameMode) :-
     bot_mode(Mode, GameMode).
 
 /*
-  bot_mode(+Input, -GameMode)
-  Checks if the input is valid and chooses the Game Mode with the correct bot difficulty based on their choice
+bot_mode(+Input, -GameMode)
+Checks if the input is valid and chooses the Game Mode with the correct bot difficulty based on their choice
 */
 bot_mode(Input, GameMode) :-
     Input > 0,
@@ -134,17 +134,17 @@ bot_mode(_, GameMode) :-
     choose_bot_difficulty(GameMode).
 
 /*
-  choose_size(-Size)
-  Reads the input of the user and chooses the Size of the board based on their choice
+choose_size(-Size)
+Reads the input of the user and chooses the Size of the board based on their choice
 */
 choose_size(Size) :-
-    nl, write('                               Choose Board Size (between 5 and 12):'),
+    nl, write('                           Choose Board Size (between 5 and 12):'),
     read_input(TempSize), nl,
     size(TempSize, Size).
 
 /*
-  size(+Input, -Size)
-  Checks if the input is valid and chooses the Size of the board based on the input
+size(+Input, -Size)
+Checks if the input is valid and chooses the Size of the board based on the input
 */
 size(Input, Size) :-
     Input < 13,
@@ -155,8 +155,8 @@ size(_, Size) :-
     choose_size(Size).
 
 /*
-    read_input(-FinalInput)
-    Reads the input of the user for the menu options and transforms them in an integer
+read_input(-FinalInput)
+Reads the input of the user for the menu options and transforms them in an integer
 */
 read_input(FinalInput) :-
     read_line(Input),

@@ -1,5 +1,3 @@
-:- consult('board.pl').
-
 /*
 move(+GameState, +Move, -NewGameState)
 Performs the given move by replacing the correct gamestate cells
@@ -65,7 +63,7 @@ check_game_over(Size, BoardSize, [Piece | T], RowNum, Winner) :-
         )
     .
 
-/*v
+/*
 valid_moves(+GameState, +Player, -ListOfMoves)
 Given the gamestate and the player, it returns all the valid moves that can be performed
 */
